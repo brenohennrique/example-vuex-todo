@@ -10,5 +10,18 @@
 
   "app_footer": {
     "message": "Aplicação criada afins de estudos sobre VUEX."
+  },
+
+  "users": {
+    "tag": "Usuários",
+    "button": {
+      "new": "Novo usuário"
+    },
+
+    "placeholder": {
+      "add": "Insira o nome do usuário"
+    },
+
+    "tasks": "{tasks}: Tarefas"
   }
 }
