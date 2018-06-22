@@ -1,0 +1,14 @@
+{
+  "app_header": {
+    "title": "ToDo List",
+    "message": "ZapTalk - Vuex Example"
+  },
+
+  "description": {
+    "message": "Exemplo da utilização do VUEX no Vue.js"
+  },
+
+  "app_footer": {
+    "message": "Aplicação criada afins de estudos sobre VUEX."
+  }
+}
