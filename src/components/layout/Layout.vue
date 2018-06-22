@@ -8,6 +8,9 @@
       <div class="users">
         <Users />
       </div>
+      <div class="todos">
+        <Todos />
+      </div>
     </div>
 
     <AppFooter />
@@ -20,6 +23,7 @@ import Description from './Description'
 import AppFooter from './AppFooter'
 
 import Users from '../users/Users'
+import Todos from '../todo/Todos'
 
 export default {
   name: 'layout',
@@ -28,7 +32,8 @@ export default {
     AppHeader,
     Description,
     AppFooter,
-    Users
+    Users,
+    Todos
   }
 }
 </script>

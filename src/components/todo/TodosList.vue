@@ -1,6 +1,6 @@
 <template>
   <div class="TodosList">
-    <div class="todo" :class="{ done: todo.done }" :key="todo.id" v-for="todo in todos">
+    <div class="todo" :class="{ done: todo.done }" :key="todo.id" v-for="todo in getTodos">
       <button class="icon" @click="toggle(todo)">
         <CheckCircle class="svg check" />
       </button>
@@ -8,13 +8,13 @@
       <input
         class="input"
         :value="todo.title"
-        placeholder="Type in the title of the task!"
-        @input="e => { update(todo.id, e.target.value) }"
+        :placeholder="$t('todos.placeholder.add')"
+        @input="e => { updateTodoSelect(todo, e.target.value) }"
       >
 
-      <Assignee :todoId="todo.id" />
+      <Assignee :todo="todo" />
 
-      <button class="icon" @click="destroy(todo.id)">
+      <button class="icon" @click="destroyTodo(todo)">
         <Trash class="svg" />
       </button>
     </div>
@@ -22,9 +22,10 @@
 </template>
 
 <script>
-import CheckCircle from '../../icons/CheckCircle'
-import Trash from '../../icons/Trash'
-import Assignee from '../../TodosAssignee'
+import { mapGetters, mapActions } from 'vuex'
+import CheckCircle from '../icons/CheckCircle'
+import Trash from '../icons/Trash'
+import Assignee from './TodosAssignee'
 
 export default {
   components: {
@@ -34,29 +35,36 @@ export default {
   },
 
   computed: {
-    todos () {
-      return this.$store.getters['entities/todos/query']().orderBy('id', 'desc').get()
-    }
+    ...mapGetters({
+      'getTodos': 'getTodos'
+    })
   },
 
   methods: {
+    ...mapActions([
+      'updateTodo',
+      'deleteTodo'
+    ]),
+
+    updateTodoSelect (todo, value) {
+      todo.title = value
+      this.updateTodo(todo)
+    },
+
+    destroyTodo (todo) {
+      this.deleteTodo(todo)
+    },
+
     toggle (todo) {
-      this.$store.dispatch('entities/todos/update', { id: todo.id, done: !todo.done })
-    },
-
-    update (id, title) {
-      this.$store.dispatch('entities/todos/update', { id, title })
-    },
-
-    destroy (id) {
-      this.$store.dispatch('entities/todos/delete', id)
+      todo.done = !todo.done
+      this.updateTodo(todo)
     }
   }
 }
 </script>
 
 <style scoped>
-@import "styles/variables";
+@import "../../assets/styles/variables";
 
 .todo {
   display: flex;

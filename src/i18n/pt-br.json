@@ -23,5 +23,20 @@
     },
 
     "tasks": "{tasks}: Tarefas"
+  },
+
+  "todos": {
+    "tag": "Tarefas",
+    "button": {
+      "new": "Nova tarefa"
+    },
+
+    "placeholder": {
+      "add": "Insira o titulo da tarefa"
+    },
+
+    "select": {
+      "user": "Selecione um usuário"
+    }
   }
 }

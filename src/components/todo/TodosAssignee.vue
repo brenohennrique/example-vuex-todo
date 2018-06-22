@@ -2,14 +2,9 @@
   <div class="TodosAssignee">
     <User class="user" />
 
-    <select class="select" :class="{ selected: !!todo.assignee }" @change="update">
-      <option class="option" value="">Choose assignee</option>
-      <option
-        class="option"
-        :value="user.id"
-        :selected="todo.user_id == user.id"
-        v-for="user in users"
-      >
+    <select class="select" v-model="userSelect" :class="{ selected: !!todo.assignee }" @change="update">
+      <option class="option" value="">{{ 'todos.select.user' | translate }}</option>
+      <option class="option" :value="user" :selected="todo.userId == user.id" v-for="user in getUsers" :key="user.id">
         {{ user.name }}
       </option>
     </select>
@@ -19,8 +14,9 @@
 </template>
 
 <script>
-import User from '../../icons/User'
-import ChevronDown from '../../icons/ChevronDown'
+import { mapGetters, mapActions } from 'vuex'
+import User from '../icons/User'
+import ChevronDown from '../icons/ChevronDown'
 
 export default {
   components: {
@@ -29,32 +25,38 @@ export default {
   },
 
   props: {
-    todoId: { type: Number, required: true }
+    todo: { type: Object, required: true }
   },
 
-  computed: {
-    users () {
-      return this.$store.getters['entities/users/query']().orderBy('name').get()
-    },
+  data: () => ({
+    userSelect: {}
+  }),
 
-    todo () {
-      return this.$store.getters['entities/todos/query']().with('assignee').find(this.todoId)
-    }
+  computed: {
+    ...mapGetters({
+      'getUsers': 'getUsers'
+    })
   },
 
   methods: {
-    update (e) {
-      this.$store.dispatch('entities/todos/update', {
-        id: this.todoId,
-        user_id: Number(e.target.value)
-      })
+    ...mapActions([
+      'updateTodo',
+      'updateUser'
+    ]),
+
+    update () {
+      this.todo.userId = this.userSelect.id
+      this.userSelect.todos.push(this.todo)
+
+      this.updateUser(this.userSelect)
+      this.updateTodo(this.todo)
     }
   }
 }
 </script>
 
 <style scoped>
-@import "styles/variables";
+@import "../../assets/styles/variables";
 
 .TodosAssignee {
   position: relative;

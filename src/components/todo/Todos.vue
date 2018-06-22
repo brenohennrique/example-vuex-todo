@@ -2,8 +2,8 @@
   <section class="Todos">
     <div class="container">
       <div class="header">
-        <h2 class="title">TODOS</h2>
-        <button class="button" @click="add">ADD TODO</button>
+        <h2 class="title">{{ 'todos.tag' | translate }}</h2>
+        <button class="button" @click="includeTodo">{{ 'todos.button.new' | translate }}</button>
       </div>
 
       <TodosList />
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import TodosList from './TodosList'
 
 export default {
@@ -19,24 +20,58 @@ export default {
     TodosList
   },
 
-  data () {
-    return {
-      id: 4
+  data: () => ({
+    todo: {
+      id: 0,
+      userId: 0,
+      title: '',
+      done: false
+    }
+  }),
+
+  computed: {
+    ...mapGetters({
+      'getTodos': 'getTodos'
+    }),
+
+    lastTodo () {
+      if (Object.keys(this.getTodos).length !== 0) {
+        let newTodo = {
+          id: this.getTodos[this.getTodos.length - 1].id + 1,
+          userId: 0,
+          title: '',
+          done: false
+        }
+
+        return newTodo
+      } else {
+        let todo = {
+          id: 0,
+          userId: 0,
+          title: '',
+          done: false
+        }
+
+        return todo
+      }
     }
   },
 
   methods: {
-    add () {
-      this.$store.dispatch('entities/todos/insert', {
-        data: { id: this.id++ }
-      })
+    ...mapActions([
+      'addTodo'
+    ]),
+
+    includeTodo () {
+      this.todo = this.lastTodo
+      this.addTodo(this.todo)
     }
   }
 }
 </script>
 
 <style scoped>
-@import "styles/variables";
+@import "../../assets/styles/variables";
 
 .container {
   border-radius: 4px;
